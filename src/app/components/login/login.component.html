@@ -1,1 +1,34 @@
-<p>login works!</p>
+<div id="page-login">
+    <img src="" alt="" class="page-login-image">
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-4">
+                <form [formGroup]="form" (ngSubmit)="login()">
+                    <div class="form-group">
+                        <input class="form-control"
+                               placeholder="usuario" 
+                               [class.is-invalid]="emailValidate"
+                               formControlName="email"
+                               type="text">
+                        <small *ngIf="emailValidate" class="text-danger">
+                            Ingrese un correo válido
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control"
+                               placeholder="contraseña"
+                               [class.is-invalid]="passwordValidate"
+                               formControlName="password"
+                               type="password">
+                        <small *ngIf="passwordValidate" class="text-danger">
+                            Ingrese la contraseña
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-block btn-primary" type="submit" value="Iniciar sesión">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

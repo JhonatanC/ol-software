@@ -28,6 +28,10 @@ export class AuthService {
     localStorage.setItem('token',idToken)
   }
 
+  IsAuthenticated(){
+    return this.userToken.length > 2;
+  }
+
   readToken(){
     if( localStorage.getItem('token') ){
       this.userToken = localStorage.getItem('token');
@@ -67,7 +71,7 @@ export class AuthService {
   }
 
   logout(){
-
+    localStorage.removeItem('token');
   }
 
 

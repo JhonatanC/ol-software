@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { UserModel } from 'src/app/models/users.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-create-user',
@@ -15,13 +16,15 @@ export class CreateUserComponent implements OnInit {
 
   constructor( 
     private fb: FormBuilder,
-    private _auth: AuthService ) {
+    private _auth: AuthService,
+    private _users: UsersService ) {
 
       this.createForm();
 
     }
 
   ngOnInit(): void {
+    
   }
 
   get nameValidate() {
@@ -58,6 +61,7 @@ export class CreateUserComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
+      id: '',
       name: ['',Validators.required],
       last_name: ['',Validators.required],
       dni: ['',Validators.required],
@@ -72,7 +76,7 @@ export class CreateUserComponent implements OnInit {
   register(){
 
     this.user = this.form.value;
-    console.log(this.user);
+    // console.log(this.user);
 
     if ( this.form.invalid ) {
 
@@ -88,11 +92,17 @@ export class CreateUserComponent implements OnInit {
      
     }
 
-    this._auth.register(this.user).subscribe( (data:any) =>{
+
+    this._users.createUser(this.user).subscribe( (data:any) =>{
       console.log(data);
-    }, (error) =>{
-      console.log(error.error.error.message);
+      this.user = data;
     });
+
+    // this._auth.register(this.user).subscribe( (data:any) =>{
+    //   console.log(data);
+    // }, (error) =>{
+    //   console.log(error.error.error.message);
+    // });
 
   }
 

@@ -93,16 +93,16 @@ export class CreateUserComponent implements OnInit {
     }
 
 
-    this._users.createUser(this.user).subscribe( (data:any) =>{
-      console.log(data);
-      this.user = data;
-    });
-
-    // this._auth.register(this.user).subscribe( (data:any) =>{
+    // this._users.createUser(this.user).subscribe( (data:any) =>{
     //   console.log(data);
-    // }, (error) =>{
-    //   console.log(error.error.error.message);
+    //   this.user = data;
     // });
+
+    this._auth.register(this.user).subscribe( (data:any) =>{
+      console.log(data);
+    }, (error) =>{
+      console.log(error.error.error.message);
+    });
 
   }
 

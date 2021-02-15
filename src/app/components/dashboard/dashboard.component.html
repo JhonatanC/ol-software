@@ -1,7 +1,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
-            <a [routerLink]="['/dashboard']">Roles</a>
+          <ul>
+            <li>
+              <a [routerLink]="['/dashboard']">Roles</a>
+            </li>
+            <li>
+              <a [routerLink]="['/create-user']" target="_blank">Crear</a>
+            </li>
+          </ul>
         </div>
         <div class="col-md-10">
             <div class="row justify-content-between">

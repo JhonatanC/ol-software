@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UserModel } from 'src/app/models/users.model';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private _auth: AuthService ) {
+    private _auth: AuthService,
+    private _router: Router ) {
 
     this.createForm();
   }
@@ -56,6 +58,7 @@ export class LoginComponent implements OnInit {
 
     this._auth.login(this.user).subscribe( (data:any) =>{
       console.log(data);
+      this._router.navigate(['/roles']);
     }, (error) =>{
       console.log(error.error.error.message);
     });

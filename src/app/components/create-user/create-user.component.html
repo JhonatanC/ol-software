@@ -1,9 +1,9 @@
 <div id="form-create">
     <div class="container">
         <div class="row ">
-            <div class="col-md-12">
+            <!-- <div class="col-md-12">
                 <h1>Agregar nuevo usuario</h1>
-            </div>
+            </div> -->
             <div class="col-md-12">
                 <form [formGroup]="form" (ngSubmit)="register()">
 
@@ -50,11 +50,13 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Rol asociado</label>
-                                <input class="form-control"
-                                       [class.is-invalid]="rolValidate"
-                                       formControlName="rol"
-                                       type="text">
+                                <div class="form-group">
+                                    <label for="">Rol asociado</label>
+                                    <select class="form-control" [class.is-invalid]="rolValidate" formControlName="rol_id">
+                                      <option value="" selected>Selecciones un rol</option>
+                                      <option *ngFor="let rol of roles" value="{{ rol.id }}"> {{ rol.rol }} </option>
+                                    </select>
+                                </div>
                                 <small *ngIf="rolValidate" class="text-danger">
                                     Ingrese el rol
                                 </small>
@@ -64,13 +66,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Estado</label>
-                                <input class="form-control"
-                                       [class.is-invalid]="statusValidate"
-                                       formControlName="status"
-                                       type="text">
-                                <small *ngIf="statusValidate" class="text-danger">
+                                    <select class="form-control" [class.is-invalid]="statusValidate" formControlName="status_id">
+                                      <option value="" selected>Selecciones un rol</option>
+                                      <option *ngFor="let statu of status" value="{{ statu.id }}"> {{ statu.status }} </option>
+                                    </select>
+                                  <small *ngIf="statusValidate" class="text-danger">
                                     Ingrese el estado
-                                </small>
+                                </small>                                
                             </div>
                         </div>
 
@@ -116,7 +118,10 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input class="btn btn-block btn-primary" type="submit" value="Iniciar sesión">
+                                <input class="btn btn-primary" type="submit" value="Aceptar">
+                                <button type="button" class="btn btn-success close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">Cancelar</span>
+                                </button>
                             </div>
                         </div>
 

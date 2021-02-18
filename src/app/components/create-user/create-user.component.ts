@@ -14,6 +14,9 @@ export class CreateUserComponent implements OnInit {
   form: FormGroup;
   user: UserModel;
 
+  roles:any = [];
+  status:any = [];
+
   constructor( 
     private fb: FormBuilder,
     private _auth: AuthService,
@@ -24,7 +27,14 @@ export class CreateUserComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    
+    this._users.roles().subscribe((data:any)=>{
+      console.log(data);
+      this.roles = data;
+    });
+    this._users.status().subscribe((data:any)=>{
+      console.log(data);
+      this.status = data;
+    });
   }
 
   get nameValidate() {
@@ -40,11 +50,11 @@ export class CreateUserComponent implements OnInit {
   }
 
   get rolValidate() {
-    return this.form.get('rol').invalid && this.form.get('rol').touched
+    return this.form.get('rol_id').invalid && this.form.get('rol_id').touched
   }
 
   get statusValidate() {
-    return this.form.get('status').invalid && this.form.get('status').touched
+    return this.form.get('status_id').invalid && this.form.get('status_id').touched
   }
 
   get phoneValidate() {
@@ -65,8 +75,8 @@ export class CreateUserComponent implements OnInit {
       name: ['',Validators.required],
       last_name: ['',Validators.required],
       dni: ['',Validators.required],
-      rol: ['',Validators.required],
-      status: ['',Validators.required],
+      rol_id: ['',Validators.required],
+      status_id: ['',Validators.required],
       phone: ['',Validators.required],
       email  : ['', [ Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')] ],
       password  : ['',Validators.required]
@@ -92,17 +102,21 @@ export class CreateUserComponent implements OnInit {
      
     }
 
+    this._users.store(this.user).subscribe( (data:any) =>{
+      console.log(data);
+    })
+
 
     // this._users.createUser(this.user).subscribe( (data:any) =>{
     //   console.log(data);
     //   this.user = data;
     // });
 
-    this._auth.register(this.user).subscribe( (data:any) =>{
-      console.log(data);
-    }, (error) =>{
-      console.log(error.error.error.message);
-    });
+    // this._auth.register(this.user).subscribe( (data:any) =>{
+    //   console.log(data);
+    // }, (error) =>{
+    //   console.log(error.error.error.message);
+    // });
 
   }
 

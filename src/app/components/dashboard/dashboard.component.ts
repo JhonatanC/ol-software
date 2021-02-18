@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UserModel } from 'src/app/models/users.model';
 import { UsersService } from 'src/app/services/users.service';
 
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +14,10 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
+
+  form: FormGroup;
+  roles:any = [];
+  status:any = [];
 
   columnas: string[] = ['name','last_name','dni','rol','status','phone','email','accion'];
   users: UserModel[] = [];
@@ -21,19 +27,69 @@ export class DashboardComponent {
 
   constructor( 
     private _auth: AuthService,
-    private _users: UsersService ) {
-      
+    private _users: UsersService,
+    private fb: FormBuilder ) {
+      this.createForm();
+    }
+
+    createForm() {
+      this.form = this.fb.group({
+        name  : '',
+        last_name  : '',
+        dni  : '',
+        rol_id  : '',
+        status  : '',
+        phone  : '',
+        email  : '',
+        password  : '',
+      });
     }
 
   ngOnInit(): void {
+    this.listUsers();
+    this._users.roles().subscribe((data:any)=>{
+      console.log(data);
+      this.roles = data;
+    });
+    this._users.status().subscribe((data:any)=>{
+      console.log(data);
+      this.status = data;
+    });
+  }
 
-    this._users.listUsers().subscribe( (data:any) =>{
-
+  listUsers(){
+    this._users.filter(this.form.value).subscribe( (data:any) =>{
+      console.log(data);
       this.users = data;
       this.dataSource = new MatTableDataSource<UserModel>(this.users);
       this.dataSource.paginator = this.paginator;
-      console.log(this.users);
+    });
+  }
 
+  filterData(){
+    console.log(this.form.value);
+    this._users.filter(this.form.value).subscribe( (data:any) =>{
+      this.users = data;
+      this.dataSource = new MatTableDataSource<UserModel>(this.users);
+      this.dataSource.paginator = this.paginator;
+    });
+  }
+
+  clearForm(){
+    let clear = this.form.reset({
+        name  : '',
+        last_name  : '',
+        dni  : '',
+        rol_id  : '',
+        status  : '',
+        phone  : '',
+        email  : '',
+        password  : '',
+    });
+    this._users.filter(clear).subscribe( (data:any) =>{
+      this.users = data;
+      this.dataSource = new MatTableDataSource<UserModel>(this.users);
+      this.dataSource.paginator = this.paginator;
     });
   }
 
@@ -41,8 +97,9 @@ export class DashboardComponent {
     this._auth.logout();
   }
 
-  deleteUser(id){
-    this._users.deleteUser(id).subscribe( (data:any) =>{
+  delete(id){
+    this._users.delete(id).subscribe( (data:any) =>{
+      this.listUsers();
       console.log(data);
     });
   }

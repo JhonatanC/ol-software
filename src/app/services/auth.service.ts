@@ -9,15 +9,9 @@ import { map } from 'rxjs/operators' ;
 })
 export class AuthService {
 
-  private url = 'https://identitytoolkit.googleapis.com/v1/accounts';
-  private apiKey = 'AIzaSyCZj4Joa43AjtfKdSmND3eAzqu5M31FmAY';
+  url:string = 'http://olsoftware.develop/api';
+
   userToken:string;
-
-  // Crear usuario
-  // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
-
-  // Login
-  // https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]
 
   constructor( private _http: HttpClient ) {
     this.readToken();
@@ -42,29 +36,17 @@ export class AuthService {
     return this.userToken;
   }
 
-  register(user: UserModel){
-    const authData = {
-      ...user,
-      returnSecureToken: true
-    };
-
-    return this._http.post(`${this.url}:signUp?key=${this.apiKey}`, authData).pipe(
-      map( resp => {
-        this.saveToken( resp['idToken'] );
-        return resp;
-      })
-    )
-  }
 
   login(user: UserModel){
     const authData = {
-      ...user,
-      returnSecureToken: true
+      email: user.email,
+      password: user.password,
+      remember_me: true
     };
 
-    return this._http.post(`${this.url}:signInWithPassword?key=${this.apiKey}`, authData).pipe(
+    return this._http.post(`${this.url}/login`, authData).pipe(
       map( resp => {
-        this.saveToken( resp['idToken'] );
+        this.saveToken( resp['access_token'] );
         return resp;
       })
     );

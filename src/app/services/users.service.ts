@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserModel } from '../models/users.model';
 import { map } from 'rxjs/operators';
@@ -8,57 +8,67 @@ import { map } from 'rxjs/operators';
 })
 export class UsersService {
 
-  url:string = 'https://ol-software-cee51-default-rtdb.firebaseio.com';
+  url:string = 'http://olsoftware.develop/api';
 
   constructor(private _http: HttpClient) {}
 
-  private createArrayUsers( usersObj: object ){
-    const users: UserModel[] = []
+  // index(){
+  //   const headers = new HttpHeaders({
+  //     'Authorization':'Bearer ' + localStorage.getItem('token')
+  //   });
+  //   return this._http.get(`${this.url}/users`,{headers: headers});
+  // }
 
-    if(usersObj === null){ return []; }
-
-    Object.keys( usersObj ).forEach( (key) =>{
-      const user: UserModel = usersObj[key];
-      user.id = key;
-
-      users.push(user);
+  filter(data){
+    const headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization':'Bearer ' + localStorage.getItem('token')
     });
-
-    return users;
-
-
+    return this._http.post(`${this.url}/filter`, data,{headers: headers});
   }
 
-  createUser( user: UserModel ){
-    return this._http.post(`${this.url}/users.json`, user).pipe(
-      map( (resp:any) => {
-        user.id = resp.name;
-        return user;
-      })
-    )
+  show(id:number){
+    const headers = new HttpHeaders({
+      'Authorization':'Bearer ' + localStorage.getItem('token')
+    });
+    return this._http.get(`${this.url}/users/${id}`,{headers: headers});
   }
 
-  listUsers(){
-    return this._http.get(`${this.url}/users.json`).pipe(
-      map( this.createArrayUsers )
-    );
+  store(user: UserModel){
+    const headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization':'Bearer ' + localStorage.getItem('token')
+    });
+    return this._http.post(`${this.url}/users`, user,{headers: headers});
   }
 
-  viewUser(id:string){
-    return this._http.get(`${this.url}/${id}`);
+  update(user: UserModel){
+    const headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization':'Bearer ' + localStorage.getItem('token')
+    });
+    return this._http.put(`${this.url}/users/${user.id}`, user,{headers: headers});
   }
 
-  updateUser( user: UserModel ){
-    const userDB = {
-      ...user
-    };
-
-    delete userDB.id;
-    return this._http.put(`${this.url}users/${user.id}.json`, userDB);
+  delete(id:number){
+    const headers = new HttpHeaders({
+      'Authorization':'Bearer ' + localStorage.getItem('token')
+    });
+    return this._http.delete(`${this.url}/users/${id}`,{headers: headers});
   }
 
-  deleteUser(id){
-    return this._http.delete(`${this.url}users/${id}.json`);
+  roles(){
+    const headers = new HttpHeaders({
+      'Authorization':'Bearer ' + localStorage.getItem('token')
+    });
+    return this._http.get(`${this.url}/roles`,{headers: headers});    
+  }
+
+  status(){
+    const headers = new HttpHeaders({
+      'Authorization':'Bearer ' + localStorage.getItem('token')
+    });
+    return this._http.get(`${this.url}/status`,{headers: headers});    
   }
 
 }

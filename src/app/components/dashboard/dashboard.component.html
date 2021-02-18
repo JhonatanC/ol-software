@@ -1,22 +1,28 @@
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button> -->
+
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2">
-          <ul>
+        <div class="col-md-2 aside-menu">
+          <ul class="list-aside">
             <li>
               <a [routerLink]="['/dashboard']">Roles</a>
-            </li>
-            <li>
-              <a [routerLink]="['/create-user']" target="_blank">Crear</a>
             </li>
           </ul>
         </div>
         <div class="col-md-10">
-            <div class="row justify-content-between">
+            <div style="padding: 1rem;" class="row justify-content-between">
                 <p>Prueba Frontend</p>
                 <p><a (click)="getOut()">Cerrar</a></p>
             </div>
             <div class="row">
+
                 <div class="col-md-9">
+                  <div style="padding: 1rem;" class="row justify-content-between">
+                    <h3>Usuarios recientes</h3>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"> Crear </button>
+                  </div>
                     <div class="mat-elevation-z8">
                         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" #tabla1>
                       
@@ -59,7 +65,7 @@
                             <th mat-header-cell *matHeaderCellDef> Acción </th>
                             <td mat-cell *matCellDef="let users">
                                 <a href=""> <mat-icon>edit</mat-icon> </a>
-                                <a (click)="deleteUser(users.id)" href=""> <mat-icon>restore_from_trash</mat-icon> </a>
+                                <a (click)="delete(users.id)" [routerLink]=""> <mat-icon>restore_from_trash</mat-icon> </a>
                             </td>
                           </ng-container>
 
@@ -71,10 +77,82 @@
                       </div>
                 </div>
                 <div class="col-md-3">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo alias laborum quod quidem temporibus amet! Possimus harum sint quisquam! Facilis velit eum vero impedit quaerat debitis dicta. Quaerat, officia ab.
+                  <form [formGroup]="form">
+
+                    <div class="form-group">
+                      <label for="">Nombres</label>
+                      <input class="form-control" formControlName="name" type="text">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="">Apellidos</label>
+                      <input class="form-control" formControlName="last_name" type="text">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="">Identificación (C.C)</label>
+                      <input class="form-control" formControlName="dni" type="text">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="">Rol asociado</label>
+                      <select class="form-control" formControlName="dni">
+                        <option value="" selected>Selecciones un rol</option>
+                        <option *ngFor="let rol of roles" value="{{ rol.id }}"> {{ rol.rol }} </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="">Estado</label>
+                      <select class="form-control" formControlName="status">
+                        <option value="" selected>Selecciones un rol</option>
+                        <option *ngFor="let statu of status" value="{{ statu.id }}"> {{ statu.status }} </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="">Teléfono</label>
+                      <input class="form-control" formControlName="phone" type="text">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="">Correo Electrónico</label>
+                      <input class="form-control" formControlName="email" type="email">
+                    </div>
+  
+                    <div class="form-group flex-buttons">
+                      <input class="btn btn-success"
+                             value="Filtrar"
+                             (click)="filterData()"
+                             type="submit">
+  
+                      <input class="btn btn-outline-success"
+                             value="Limpiar"
+                             (click)="clearForm()"
+                             type="submit">
+                    </div>
+
+                  </form>
                 </div>
             </div>
         </div>
     </div>
 
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">Agregar nuevo usuario</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-create-user></app-create-user>
+      </div>
+    </div>
+  </div>
 </div>
